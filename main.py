@@ -328,3 +328,46 @@ class program:
     def toString():
         return "program"
 
+
+class ParseResult: 
+    def __init__(self,result, nextPosition):
+        self.result= result
+        self.nextPos = nextPosition
+    
+class Parser: 
+    def __init__(self,tokens):
+        self.tokens = tokens 
+        self.position = 0
+    def parseExp(self, position):
+        if position == 0:
+            return None
+        if self.tokens[position][0] == "VarToken":
+            return ParseResult(varExp(self.tokens[position][1]),position + 1)
+        elif self.tokens[position][0] == "DoubleQuoteToken": 
+            position += 1
+            if self.tokens[position+1][0] == "DoubleQuoteToken":
+                return ParseResult(strExp(self.tokens[position][1],position + 2 ))
+            else:
+                raise("Parser: String Failure")
+        elif self.tokens[position][0] == "IntegerToken":
+            return ParseResult(intExp(self.tokens[position][1]), position+ 1)
+        elif self.tokens[position][0] == "LeftParenToken":
+            position += 1
+            if self.tokens[position][0] == "PrintToken":
+                return parseExp( 0)
+            
+                
+        
+
+    def parseType(): 
+        return None
+    def parseOp():
+        return None
+    def parseVarDec():
+        return None
+    def parseStmt():
+        return None
+    def parseMethodDef():
+        return None 
+    def parseProgram():
+        return None
