@@ -407,4 +407,8 @@ class Parser:
 tokens = [('LeftParenToken', '('), ('PlusToken', '+'), ('LeftParenToken', '('),('PlusToken', '+'),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')'), ('LeftParenToken', '('), ('PlusToken', '+'),('IntegerToken', '3'), ('IntegerToken', '2'), ('RightParenToken', ')'),('RightParenToken', ')')]
 testingParse = Parser(tokens)
 result = testingParse.parseExp(0)
-print(result)
+
+
+tokens == [('LeftParenToken', '('),('PlusToken', '+'),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')')]
+testingParse = Parser(tokens)
+result = testingParse.parseExp(0)
