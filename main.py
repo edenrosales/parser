@@ -172,7 +172,8 @@ class printExp(exp):
         return "printExp"
 
 class opExp(exp):
-    def __init__(self,leftValue , rightValue):
+    def __init__(self,operation, leftValue , rightValue):
+        self.operation = operation
         self.leftExp = leftValue
         self.rightExp = rightValue
     def hashCode():
@@ -339,8 +340,6 @@ class Parser:
         self.tokens = tokens 
         self.position = 0
     def parseExp(self, position):
-        if position == 0:
-            return None
         if self.tokens[position][0] == "VarToken":
             return ParseResult(varExp(self.tokens[position][1]),position + 1)
         elif self.tokens[position][0] == "DoubleQuoteToken": 
@@ -354,9 +353,40 @@ class Parser:
         elif self.tokens[position][0] == "LeftParenToken":
             position += 1
             if self.tokens[position][0] == "PrintToken":
-                return parseExp( 0)
-            
+                expression = self.parseExp(position+1)
+                position = expression.nextPos
+                if self.tokens[position][0] == "RightParenToken":
+                    return ParseResult(printExp(expression),position + 1 )   
+            elif self.tokens[position][0] in ("PlusToken", "MinusToken","MultiplicationToken","DivisionToken","DoubleDivisionToken","ModToken"):
+                operation = self.tokens[position][1]
+                position += 1 
                 
+                leftExpression = self.parseExp(position+ 1)
+                rightExpression = self.parseExp(leftExpression.nextPos)
+                position = rightExpression.nextPos
+                if self.tokens[position][0] == "RightParenToken":
+                    return ParseResult(opExp(operation,leftExpression,rightExpression),position + 1)
+            elif self.tokens[position][0] == "IDENTIFIER":
+                expressions = self.parseExp(position+1)
+                position = expressions.nextPos
+                if self.tokens[position][0] == "RightParenToken":
+                    return ParseResult(methodnameExp(expressions),position+1)
+            elif self.tokens[position][0] == "PairToken":
+                leftExpression = self.parseExp(position+ 1)
+                rightExpression = self.parseExp(leftExpression.nextPos)
+                position = rightExpression.nextPos
+                if self.tokens[position][0] == "RightParenToken":
+                    return ParseResult(pairExp(leftExpression,rightExpression),position + 1)
+            elif self.tokens[position][0] == "FSTToken":
+                expression = self.parseExp(position+1)
+                position = expression.nextPos
+                if self.tokens[position][0] == "RightParenToken":
+                    return ParseResult(fstExp(expression),position + 1 )   
+            elif self.tokens[position][0] == "SNDToken":
+                expression = self.parseExp(position+1)
+                position = expression.nextPos
+                if self.tokens[position][0] == "RightParenToken":
+                    return ParseResult(sndExp(expression),position + 1 )   
         
 
     def parseType(): 
@@ -371,3 +401,8 @@ class Parser:
         return None 
     def parseProgram():
         return None
+    
+tokens = [('LeftParenToken', '('), ('PlusToken', '+'), ('LeftParenToken', '('),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')'), ('LeftParenToken', '('), ('PlusToken', '+'),('IntegerToken', '3'), ('IntegerToken', '2'), ('RightParenToken', ')'),('RightParenToken', ')')]
+testingParse = Parser(tokens)
+result = testingParse.parseExp(0)
+print("This works")
