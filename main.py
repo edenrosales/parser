@@ -484,9 +484,12 @@ class Parser:
                 position = expression.nextPos
                 if self.tokens[position][0] == "ColonToken":
                     position += 1 
-                    
-                    statements = self.parseStmt(position)
-                    position = statements.nextPos
+                    statements = []
+                    while self.tokens[position][0] == "LeftParenToken" or self.tokens[position][0] == "BreakToken":
+                        statement = self.parseStmt(position)
+                        position = statement.nextPos
+                        statements.append(statement)
+                    position = statement.nextPos if len(statements) > 0 else position
                     if self.tokens[position][0] == "RightParenToken":
                         return ParseResult(forStmt(varname,expression,statements), position + 1)
                     else:
