@@ -443,7 +443,30 @@ class Parser:
     def parseStmt(self,position):
         if self.tokens[position][0] == "BreakToken":
             return ParseResult(breakStmt(),position + 1)
-    elif self.tokens[position][0] == "LeftParenToken":
+        elif self.tokens[position][0] == "LeftParenToken":
+            position += 1
+            if self.tokens[position][0] == "EqualsToken" and self.tokens[position+1][0] == "IDENTIFIER":
+                varname = self.tokens[position+1][1]
+                position += 2
+                expression = self.parseExp(position)
+                if self.tokens[expression.nextPos][0] == "RightParenToken":
+                    return ParseResult(assignmentStmt(varname,expression), expression.nextPos + 1)
+                else:
+                    raise Exception("Statemewnt Syntax Error")
+            
+
+            elif self.tokens[position][0] == "WhileToken":
+                return None
+            elif self.tokens[position][0] == "ForToken":
+                return None
+            elif self.tokens[position][0] == "IfToken":
+                return None
+            elif self.tokens[position][0] == "ReturnToken":
+                return None
+            else:
+                raise Exception("Statemewnt Syntax Error")
+        else:
+            raise Exception("Statement Syntax Error")
     def parseMethodDef():
         return None 
     def parseProgram():
