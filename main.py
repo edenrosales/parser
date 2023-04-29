@@ -224,6 +224,17 @@ class sndExp(exp):
     def toString():
         return "sndExp"
 
+class vardec:
+    def __init__(self,varname, expression):
+        self.varname = varname
+        self.expression = expression
+    def hashCode():
+        return 0
+    def equals(thing):
+        return thing.toString() == "vardec"
+    def toString():
+        return "vardec"
+
 #i am going to treat vardec as a statement here - because it ultimately is
 class stmt:
     def __init__(self):
@@ -404,13 +415,35 @@ class Parser:
             return ParseResult(floatType(),position+1)
         elif self.tokens[position][0] == "TTypeToken":
             return ParseResult(TType(),position+1)
-     
-    def parseOp():
+        elif self.tokens[position][0] == "LeftParenToken":
+            leftType = self.parseType(position+ 1)
+            rightType = self.parseType(leftType.nextPos)
+            position = rightType.nextPos
+            if self.tokens[position][0] == "RightParenToken":
+                return ParseResult(pairType(leftType,rightType), position+ 1)
+            else:
+                raise Exception("Type Syntax Error")
+        else:
+            raise Exception("Type Syntax Error")
+    
+    def parseOp(): #we handle this inline when we need to - didnt abstract this out
         return None
-    def parseVarDec():
-        return None
-    def parseStmt():
-        return None
+    def parseVarDec(self,position):
+        if self.tokens[position][0] == "LeftParenToken" and self.tokens[position+1][0] == "VarToken" and self.tokens[position+2][0] == "IDENTIFIER":
+            varname = self.tokens[position+2][1]
+            position+= 3
+            expression = self.parseExp(position)
+            if self.tokens[expression.nextPos][0] == "RightParenToken":
+                return ParseResult(vardec(varname,expression), expression.nextPos + 1)
+            else:
+                raise Exception("Vardec syntax error")
+        else:
+            raise Exception("Vardec Syntax Error")
+    
+    def parseStmt(self,position):
+        if self.tokens[position][0] == "BreakToken":
+            return ParseResult(breakStmt(),position + 1)
+    elif self.tokens[position][0] == "LeftParenToken":
     def parseMethodDef():
         return None 
     def parseProgram():
