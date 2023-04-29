@@ -11,6 +11,8 @@ class intType(type):
         return 0
     def equals(thing):
         return thing.toString() == "intType"
+    def __repr__(self):
+        return f"intType({repr(None)})"   
     
 class booleanType(type):
     def __init__(self):
@@ -21,6 +23,8 @@ class booleanType(type):
         return 0
     def equals(thing):
         return thing.toString() == "booleanType"
+    def __repr__(self):
+        return f"booleanType({repr(None)})"   
     
 class stringType(type):
     def __init__(self):
@@ -31,6 +35,8 @@ class stringType(type):
         return 0
     def equals(thing):
         return thing.toString() == "stringType"
+    def __repr__(self):
+        return f"stringType({repr(None)})"   
 
 class floatType(type):
     def __init__(self):
@@ -41,6 +47,8 @@ class floatType(type):
         return 0
     def equals(thing):
         return thing.toString() == "floatType"
+    def __repr__(self):
+        return f"floatType({repr(None)})"   
 
 class TType(type):
     def __init__(self):
@@ -51,6 +59,8 @@ class TType(type):
         return 0
     def equals(thing):
         return thing.toString() == "TType"
+    def __repr__(self):
+        return f"TType({repr(None)})"   
 
 class pairType(type):
     def __init__(self,leftType,rightType):
@@ -62,6 +72,9 @@ class pairType(type):
         return 0
     def equals(thing):
         return thing.toString() == "pairType"
+    def __repr__(self):
+        return f"pairType({repr(self.leftType)}, {repr(self.rightType)})"
+    
 class op:
     def __init__(self):
         return None
@@ -75,6 +88,8 @@ class plusOp(op):
         return 0
     def equals(thing):
         return thing.toString() == "plusOp"
+    def __repr__(self):
+        return f"plusOp({repr(None)})"   
 
 class minusOp(op):
     def __init__(self):
@@ -85,6 +100,8 @@ class minusOp(op):
         return 0
     def equals(thing):
         return thing.toString() == "minusOp"
+    def __repr__(self):
+        return f"minusOp({repr(None)})"    
     
 class starOp(op):
     def __init__(self):
@@ -95,6 +112,8 @@ class starOp(op):
         return 0
     def equals(thing):
         return thing.toString() == "starOp"
+    def __repr__(self):
+        return f"starOp({repr(None)})"    
     
 class oneDashOp(op):
     def __init__(self):
@@ -105,6 +124,8 @@ class oneDashOp(op):
         return 0
     def equals(thing):
         return thing.toString() == "oneDashOp"
+    def __repr__(self):
+        return f"oneDashOp({repr(None)})"    
 
 class twoDashOp(op):
     def __init__(self):
@@ -115,6 +136,8 @@ class twoDashOp(op):
         return 0
     def equals(thing):
         return thing.toString() == "twoDashOp"
+    def __repr__(self):
+        return f"twoDashOp({repr(None)})"    
     
 class modOp(op):
     def __init__(self):
@@ -125,7 +148,8 @@ class modOp(op):
         return 0
     def equals(thing):
         return thing.toString() == "modOp"
-    
+    def __repr__(self):
+        return f"modOp({repr(None)})"    
 
 class exp:
     def __init__(self):
@@ -140,6 +164,8 @@ class varExp(exp):
         return thing.toString() == "varExp"
     def toString():
         return "varExp"
+    def __repr__(self):
+        return f"varExp({repr(self.value)})"
 
 class strExp(exp):
     def __init__(self,value):
@@ -150,6 +176,8 @@ class strExp(exp):
         return thing.toString() == "strExp"
     def toString():
         return "strExp"
+    def __repr__(self):
+        return f"strExp({repr(self.value)})"
 
 class intExp(exp):
     def __init__(self,value):
@@ -160,16 +188,20 @@ class intExp(exp):
         return thing.toString() == "intExp"
     def toString():
         return "intExp"
-    
-class floatExp(exp):
-    def __init__(self,value):
-        self.value = value
-    def hashCode():
-        return 0
-    def equals(thing):
-        return thing.toString() == "floatExp"
-    def toString():
+    def __repr__(self):
+        return f"intExp({repr(self.value)})"
+
+class floatExp(exp):	
+    def __init__(self,value):	
+        self.value = value	
+    def hashCode():	
+        return 0	
+    def equals(thing):	
+        return thing.toString() == "floatExp"	
+    def toString():	
         return "floatExp"
+    def __repr__(self):
+        return f"floatExp({repr(self.value)})"
 
 class printExp(exp):
     def __init__(self,value):
@@ -180,6 +212,9 @@ class printExp(exp):
         return thing.toString() == "printExp"
     def toString():
         return "printExp"
+    def __repr__(self):
+        return f"printExp({repr(self.exp)})"
+    
 
 class opExp(exp):
     def __init__(self,operation, leftValue , rightValue):
@@ -192,6 +227,8 @@ class opExp(exp):
         return thing.toString() == "opExp"
     def toString():
         return "opExp"
+    def __repr__(self):
+        return f"opExp({repr(self.operation)}, {repr(self.leftExp)}, {repr(self.rightExp)})"
 
 class methodnameExp(exp):
     def __init__(self,expressions):
@@ -202,6 +239,8 @@ class methodnameExp(exp):
         return thing.toString() == "methodnameExp"
     def toString():
         return "methodnameExp"
+    def __repr__(self):
+        return f"methodnameExp({repr(self.exps)})"
 
 class pairExp(exp):
     def __init__(self,leftExpression,rightExpression):
@@ -213,6 +252,8 @@ class pairExp(exp):
         return thing.toString() == "pairExp"
     def toString():
         return "pairExp"
+    def __repr__(self):
+        return f"pairExp({repr(self.leftExp)}, {repr(self.rightExp)})"
 
 class fstExp(exp):
     def __init__(self,expression):
@@ -223,6 +264,8 @@ class fstExp(exp):
         return thing.toString() == "fstExp"
     def toString():
         return "fstExp"
+    def __repr__(self):
+        return f"fstExp({repr(self.exp)})"
 
 class sndExp(exp):
     def __init__(self,expression):
@@ -233,7 +276,9 @@ class sndExp(exp):
         return thing.toString() == "sndExp"
     def toString():
         return "sndExp"
-
+    def __repr__(self):
+        return f"sndExp({repr(self.exp)})"
+    
 class vardec:
     def __init__(self,varname, expression):
         self.varname = varname
@@ -244,12 +289,14 @@ class vardec:
         return thing.toString() == "vardec"
     def toString():
         return "vardec"
+    def __repr__(self):
+        return f"vardec({repr(self.varname)}, {repr(self.expression)})"
 
 #i am going to treat vardec as a statement here - because it ultimately is
 class stmt:
     def __init__(self):
         return None
-    
+
 class vardecStmt(stmt):
     def __init__(self, varname, exp):
         self.varname = varname
@@ -260,6 +307,8 @@ class vardecStmt(stmt):
         return thing.toString() == "vardecStmt"
     def toString():
         return "vardecStmt"
+    def __repr__(self):
+        return f"vardecStmt({repr(self.varname)}, {repr(self.exp)})"   
 
 class assignmentStmt(stmt):
     def __init__(self, varname, exp):
@@ -271,6 +320,8 @@ class assignmentStmt(stmt):
         return thing.toString() == "assignmentStmt"
     def toString():
         return "assignmentStmt"
+    def __repr__(self):
+        return f"assignmentStmt({repr(self.varname)}, {repr(self.exp)})"   
     
 class whileStmt(stmt):
     def __init__(self, exp, stmt):
@@ -282,6 +333,8 @@ class whileStmt(stmt):
         return thing.toString() == "whileStmt"
     def toString():
         return "whileStmt"
+    def __repr__(self):
+        return f"whileStmt({repr(self.exp)}, {repr(self.stmt)})"   
     
 class forStmt(stmt):
     def __init__(self, var, exp, stmt):
@@ -294,6 +347,8 @@ class forStmt(stmt):
         return thing.toString() == "forStmt"
     def toString():
         return "forStmt"
+    def __repr__(self):
+        return f"forStmt({repr(self.var)}, {repr(self.exp)}, {repr(self.stmt)})"   
     
 class breakStmt(stmt):
     def __init__(self):
@@ -304,6 +359,8 @@ class breakStmt(stmt):
         return thing.toString() == "breakStmt"
     def toString():
         return "breakStmt"
+    def __repr__(self):
+        return f"breakStmt({repr(None)})"  
 
 class ifElseStmt(stmt):
     def __init__(self, exp,stmt,optionalStmt):
@@ -316,6 +373,8 @@ class ifElseStmt(stmt):
         return thing.toString() == "ifElseStmt"
     def toString():
         return "ifElseStmt"
+    def __repr__(self):
+        return f"ifElseStmt({repr(self.exp)}, {repr(self.then)}, {repr(self.optionalElse)})"  
 
 class returnStmt(stmt):
     def __init__(self, exp):
@@ -326,6 +385,8 @@ class returnStmt(stmt):
         return thing.toString() == "returnStmt"
     def toString():
         return "returnStmt"
+    def __repr__(self):
+        return f"returnStmt({repr(self.optionalExp)})"  
 
 class methodDef:
     def __init__(self,methodName,methodType,varName,stmt):
@@ -339,6 +400,8 @@ class methodDef:
         return thing.toString() == "methodDef"
     def toString():
         return "methodDef"
+    def __repr__(self):
+        return f"methodDef({repr(self.methodName)}, {repr(self.type)}, {repr(self.varName)}, {repr(self.stmt)})"
 
 class program: 
     def __init__(self,method):
@@ -349,12 +412,16 @@ class program:
         return thing.toString() == "program"
     def toString():
         return "program"
-
+    def __repr__(self):
+        return f"program({repr(self.methods)})"
 
 class ParseResult: 
     def __init__(self,result, nextPosition):
         self.result= result
         self.nextPos = nextPosition
+
+    def __repr__(self):
+        return f"ParseResult({(self.result)}, {self.nextPos})"
     
 class Parser: 
     def __init__(self,tokens):
