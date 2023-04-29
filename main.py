@@ -467,10 +467,14 @@ class Parser:
             elif self.tokens[position][0] == "WhileToken":
                 expression = self.parseExp(position + 1)
                 position = expression.nextPos
-                statement = self.parseStmt(position)
-                position = statement.nextPos
+                statements = [] 
+                while self.tokens[position][0] == "LeftParenToken" or self.tokens[position][0] == "BreakToken":
+                    statement = self.parseStmt(position)
+                    position = statement.nextPos
+                    statements.append(statement)
+                position = statement.nextPos if len(statements) > 0 else position
                 if self.tokens[position][0] == "RightParenToken":
-                    return ParseResult(whileStmt(expression,statement), position)
+                    return ParseResult(whileStmt(expression,statements), position + 1)
                 else:
                     raise Exception("Statemewnt Syntax Error")
             elif self.tokens[position][0] == "ForToken" and self.tokens[position+1][0] == "IDENTIFIER" and self.tokens[position+ 2][0] == "InToken":
@@ -480,6 +484,7 @@ class Parser:
                 position = expression.nextPos
                 if self.tokens[position][0] == "ColonToken":
                     position += 1 
+                    
                     statements = self.parseStmt(position)
                     position = statements.nextPos
                     if self.tokens[position][0] == "RightParenToken":
