@@ -563,12 +563,12 @@ class Parser:
                     else:
                         raise Exception("Statemewnt Syntax Error")
                 raise Exception("Statemewnt Syntax Error")
-            elif self.tokens[position][0] == "IfToken" and self.tokens[position+1][0] == "IfToken":
-                position += 2
+            elif self.tokens[position][0] == "IfToken":
+                position += 1
                 expression = self.parseExp(position)
                 position = expression.nextPos
                 statementTrue = self.parseStmt(position)
-                position = statementTrue.neextPos
+                position = statementTrue.nextPos
                 if self.tokens[position][0] == "RightParenToken":
                     return ParseResult(ifElseStmt(expression,statementTrue,None),position + 1)
                 else:
