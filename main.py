@@ -160,6 +160,16 @@ class intExp(exp):
         return thing.toString() == "intExp"
     def toString():
         return "intExp"
+    
+class floatExp(exp):
+    def __init__(self,value):
+        self.value = value
+    def hashCode():
+        return 0
+    def equals(thing):
+        return thing.toString() == "floatExp"
+    def toString():
+        return "floatExp"
 
 class printExp(exp):
     def __init__(self,value):
@@ -359,8 +369,10 @@ class Parser:
                 return ParseResult(strExp(self.tokens[position][1],position + 2 ))
             else:
                 raise Exception("Parser: String Failure")
-        elif self.tokens[position][0] == "IntegerToken":
+        elif self.tokens[position][0] == "INTEGER":
             return ParseResult(intExp(self.tokens[position][1]), position+ 1)
+        elif self.tokens[position][0] == "FLOAT":
+            return ParseResult(floatExp(self.tokens[position][1], position + 1))
         elif self.tokens[position][0] == "LeftParenToken":
             position += 1
             if self.tokens[position][0] == "PrintToken":
@@ -371,7 +383,6 @@ class Parser:
             elif self.tokens[position][0] in ("PlusToken", "MinusToken","MultiplicationToken","DivisionToken","DoubleDivisionToken","ModToken"):
                 operation = self.tokens[position][1]
                 position += 1 
-
                 leftExpression = self.parseExp(position)
                 rightExpression = self.parseExp(leftExpression.nextPos)
                 position = rightExpression.nextPos
@@ -403,12 +414,10 @@ class Parser:
         
     # WE HAVE TO BE CAREFUL FOR THE PAIR TOKEN BECAUSE IT CAN BOTH BE A DECLARATION IF THERE ARE EXPRESSOINS INSIDE OR A TYPE IF THERE ARE TYPES INSIDE
     def parseType(self,position): 
-        if self.tokens[position][0] == "IntegerTypeToken": 
+        if self.tokens[position][0] == "IntTypeToken": 
             return ParseResult(intType(),position + 1)
         elif self.tokens[position][0] == "BooleanTypeToken":
             return ParseResult(booleanType(),position+1)
-        elif self.tokens[position][0] == "StringTypeToken":
-            return ParseResult(stringType(),position+1)
         elif self.tokens[position][0] == "StringTypeToken":
             return ParseResult(stringType(),position+1)
         elif self.tokens[position][0] == "FloatTypeToken":
@@ -445,7 +454,7 @@ class Parser:
             return ParseResult(breakStmt(),position + 1)
         elif self.tokens[position][0] == "LeftParenToken":
             position += 1
-            if self.tokens[position][0] == "EqualsToken" and self.tokens[position+1][0] == "IDENTIFIER":
+            if self.tokens[position][0] == "SingleEqualToken" and self.tokens[position+1][0] == "IDENTIFIER":
                 varname = self.tokens[position+1][1]
                 position += 2
                 expression = self.parseExp(position)
@@ -506,7 +515,7 @@ class Parser:
         else:
             raise Exception("Statement Syntax Error")
     def parseMethodDef(self,position):
-        if self.tokens[position][0] == "DefToken" and self.tokens[position+1][0] == "IDENTIFIER" and self.tokens[position+2][0] == "RightParenToken":
+        if self.tokens[position][0] == "DefToken" and self.tokens[position+1][0] == "IDENTIFIER" and self.tokens[position+2][0] == "LeftParenToken":
             methodname = self.tokens[position+1][1]
             position += 3
             typeName = self.parseType(position)
@@ -526,20 +535,20 @@ class Parser:
             raise Exception("Statemewnt Syntax Error")
 
     def parseProgram(self,position):
-        methodDef = self.parseMethod(position)
+        methodDef = self.parseMethodDef(position)
         return ParseResult(program(methodDef),methodDef.nextPos)
 
     
-tokens = [('LeftParenToken', '('), ('PlusToken', '+'), ('LeftParenToken', '('),('PlusToken', '+'),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')'), ('LeftParenToken', '('), ('PlusToken', '+'),('IntegerToken', '3'), ('IntegerToken', '2'), ('RightParenToken', ')'),('RightParenToken', ')')]
+tokens = [('LeftParenToken', '('), ('PlusToken', '+'), ('LeftParenToken', '('),('PlusToken', '+'),('INTEGER', '2'), ('INTEGER', '3'), ('RightParenToken', ')'), ('LeftParenToken', '('), ('PlusToken', '+'),('INTEGER', '3'), ('INTEGER', '2'), ('RightParenToken', ')'),('RightParenToken', ')')]
 testingParse = Parser(tokens)
 result = testingParse.parseExp(0)
 
 
-tokens = [('LeftParenToken', '('),('PlusToken', '+'),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')')]
+tokens = [('LeftParenToken', '('),('PlusToken', '+'),('INTEGER', '2'), ('INTEGER', '3'), ('RightParenToken', ')')]
 testingParse = Parser(tokens)
 result = testingParse.parseExp(0)
 
-tokens = [('LeftParenToken', '('), ("PrintToken", "print"), ("IntegerToken","2"),("RightParenToken",")")] 
+tokens = [('LeftParenToken', '('), ("PrintToken", "print"), ("INTEGER","2"),("RightParenToken",")")] 
 testingParse = Parser(tokens)
 result = testingParse.parseExp(0)
 print("this works")
