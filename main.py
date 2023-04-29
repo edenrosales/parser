@@ -493,7 +493,8 @@ class Parser:
             return ParseResult(floatType(),position+1)
         elif self.tokens[position][0] == "TTypeToken":
             return ParseResult(TType(),position+1)
-        elif self.tokens[position][0] == "LeftParenToken":
+        elif self.tokens[position][0] == "LeftParenToken" and self.tokens[position + 1][0] == "PairToken":
+            position += 1
             leftType = self.parseType(position+ 1)
             rightType = self.parseType(leftType.nextPos)
             position = rightType.nextPos
