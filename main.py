@@ -12,15 +12,15 @@ class intType(type):
     def equals(thing):
         return thing.toString() == "intType"
     
-class boolType(type):
+class booleanType(type):
     def __init__(self):
         return None
     def toString():
-        return "boolType"
+        return "booleanType"
     def hashCode():
         return 0
     def equals(thing):
-        return thing.toString() == "boolType"
+        return thing.toString() == "booleanType"
     
 class stringType(type):
     def __init__(self):
@@ -42,15 +42,15 @@ class floatType(type):
     def equals(thing):
         return thing.toString() == "floatType"
 
-class T(type):
+class TType(type):
     def __init__(self):
         return None
     def toString():
-        return "T"
+        return "TType"
     def hashCode():
         return 0
     def equals(thing):
-        return thing.toString() == "T"
+        return thing.toString() == "TType"
 
 class pairType(type):
     def __init__(self,leftType,rightType):
@@ -390,9 +390,21 @@ class Parser:
             else: 
                 raise Exception("Parser Error")
         
-
-    def parseType(): 
-        return None
+    # WE HAVE TO BE CAREFUL FOR THE PAIR TOKEN BECAUSE IT CAN BOTH BE A DECLARATION IF THERE ARE EXPRESSOINS INSIDE OR A TYPE IF THERE ARE TYPES INSIDE
+    def parseType(self,position): 
+        if self.tokens[position][0] == "IntegerTypeToken": 
+            return ParseResult(intType(),position + 1)
+        elif self.tokens[position][0] == "BooleanTypeToken":
+            return ParseResult(booleanType(),position+1)
+        elif self.tokens[position][0] == "StringTypeToken":
+            return ParseResult(stringType(),position+1)
+        elif self.tokens[position][0] == "StringTypeToken":
+            return ParseResult(stringType(),position+1)
+        elif self.tokens[position][0] == "FloatTypeToken":
+            return ParseResult(floatType(),position+1)
+        elif self.tokens[position][0] == "TTypeToken":
+            return ParseResult(TType(),position+1)
+     
     def parseOp():
         return None
     def parseVarDec():
@@ -409,6 +421,11 @@ testingParse = Parser(tokens)
 result = testingParse.parseExp(0)
 
 
-tokens == [('LeftParenToken', '('),('PlusToken', '+'),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')')]
+tokens = [('LeftParenToken', '('),('PlusToken', '+'),('IntegerToken', '2'), ('IntegerToken', '3'), ('RightParenToken', ')')]
 testingParse = Parser(tokens)
 result = testingParse.parseExp(0)
+
+tokens = [('LeftParenToken', '('), ("PrintToken", "print"), ("IntegerToken","2"),("RightParenToken",")")] 
+testingParse = Parser(tokens)
+result = testingParse.parseExp(0)
+print("this works")
