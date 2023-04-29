@@ -366,13 +366,15 @@ class Parser:
         elif self.tokens[position][0] == "DoubleQuoteToken": 
             position += 1
             if self.tokens[position+1][0] == "DoubleQuoteToken":
-                return ParseResult(strExp(self.tokens[position][1],position + 2 ))
+                return ParseResult(strExp(self.tokens[position][1]),position + 2 )
             else:
                 raise Exception("Parser: String Failure")
         elif self.tokens[position][0] == "INTEGER":
             return ParseResult(intExp(self.tokens[position][1]), position+ 1)
         elif self.tokens[position][0] == "FLOAT":
-            return ParseResult(floatExp(self.tokens[position][1], position + 1))
+            return ParseResult(floatExp(self.tokens[position][1]), position + 1)
+        elif self.tokens[position][0] == "IDENTIFIER":
+            return ParseResult(varExp(self.tokens[position][1]), position + 1)
         elif self.tokens[position][0] == "LeftParenToken":
             position += 1
             if self.tokens[position][0] == "PrintToken":
@@ -463,7 +465,7 @@ class Parser:
                 else:
                     raise Exception("Statemewnt Syntax Error")
             elif self.tokens[position][0] == "WhileToken":
-                expression == self.parseExp(position + 1)
+                expression = self.parseExp(position + 1)
                 position = expression.nextPos
                 statement = self.parseStmt(position)
                 position = statement.nextPos
@@ -492,12 +494,12 @@ class Parser:
                 statementTrue = self.parseStmt(position)
                 position = statementTrue.neextPos
                 if self.tokens[position][0] == "RightParenToken":
-                    return ParseResult(ifElseStmt(expression,statementTrue,None))
+                    return ParseResult(ifElseStmt(expression,statementTrue,None),position + 1)
                 else:
                     statementFalse = self.parseStmt(position + 1)
                     position = statementFalse.nextPos
                     if self.tokens[position][0] == "RightParenToken":
-                        return ParseResult(ifElseStmt(expression,statementTrue,statementFalse))
+                        return ParseResult(ifElseStmt(expression,statementTrue,statementFalse), position  +1)
                     else: 
                         raise Exception("Statemewnt Syntax Error")
             elif self.tokens[position][0] == "ReturnToken":
@@ -523,8 +525,12 @@ class Parser:
             if self.tokens[position][0] == "IDENTIFIER" and self.tokens[position+1][0]=="RightParenToken" and self.tokens[position+2][0] == "LeftBraceToken":
                 varname = self.tokens[position][1]
                 position += 3
-                statements = self.parseStmt(position)
-                position = statements.nextPos
+                statements = []
+                while self.tokens[position][0] == "LeftParenToken" or self.tokens[position][0] == "BreakToken":
+                    nextStatement = self.parseStmt(position)
+                    position = nextStatement.nextPos
+                    statements.append(nextStatement)            
+                position = statements[-1].nextPos if len(statements) > 0 else position
                 if self.tokens[position][0] == "RightBraceToken":
                     return ParseResult(methodDef(methodname,typeName,varname,statements),position)
                 else:
